@@ -33,14 +33,14 @@ namespace mean
       // -------------------------------------------------------------------------------------
       // env
       // -------------------------------------------------------------------------------------
-      void init(int workerThreads, int exclsuiveThreads, IoOptions ioOptions, int threadAffinityOffset = 0);
+      void init(int workerThreads, int exclsuiveThreads, IoOptions ioOptions, int threadAffinityOffset = 0, int num_cpus = 0);
       void start(TaskFunction taskFun);
       void shutdown();
       void join();
       std::string printCountersHeader();
       std::string printCounters(int te_id);
       int workerCount();
-      void adjustWorkerCount(int workerThreads);
+      void adjustWorkerCount(int workerThreads, int cpu_count = 0);
       void reflowPageProviderPartitions();
       // -------------------------------------------------------------------------------------
       // exec

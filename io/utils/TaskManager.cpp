@@ -23,7 +23,7 @@ namespace mean
    // -------------------------------------------------------------------------------------
    // env
    // -------------------------------------------------------------------------------------
-   void TaskManager::init(int workerThreads, int exclusiveThreads, IoOptions ioOptions, int threadAffinityOffset)
+   void TaskManager::init(int workerThreads, int exclusiveThreads, IoOptions ioOptions, int threadAffinityOffset, int num_cpus)
    {
       if (ioOptions.engine == "auto")
       {
@@ -47,19 +47,19 @@ namespace mean
       for (int i = 0; i < exclusiveThreads; i++)
       {
          execs.push_back(std::make_unique<TaskExecutor>(messageManager->getMessageHandler(i), IoInterface::instance().getIoChannel(i), i));
-         execs.back()->setCpuAffinityBeforeStart(i + threadAffinityOffset);
+         execs.back()->setCpuAffinityBeforeStart((num_cpus > 0) ? (i + threadAffinityOffset) % num_cpus : i + threadAffinityOffset);
          workers[i] = new leanstore::cr::Worker(i, workers, workerThreads + exclusiveThreads);
          execs.back()->this_worker = workers[i];
       }
       // workers
-      adjustWorkerCount(workerThreads);
+      adjustWorkerCount(workerThreads, num_cpus);
    }
    int TaskManager::workerCount()
    {
       return runningExecs;
    }
    // -------------------------------------------------------------------------------------
-   void TaskManager::adjustWorkerCount(int workerThreads)
+   void TaskManager::adjustWorkerCount(int workerThreads, int cpu_count)
    {
       if (runningExecs > workerThreads)
       {
@@ -82,7 +82,7 @@ namespace mean
             ensure(id < ioChannels);
             // physical channel
             execs.push_back(std::make_unique<TaskExecutor>(messageManager->getMessageHandler(id), IoInterface::instance().getIoChannel(id), id));
-            execs.back()->setCpuAffinityBeforeStart(id + threadAffinityOffset);
+            execs.back()->setCpuAffinityBeforeStart((cpu_count > 0) ? ((id + threadAffinityOffset) % cpu_count) : id + threadAffinityOffset);
             workers[id] = new leanstore::cr::Worker(id, workers, workerThreads + exclusiveThreads);
             execs.back()->this_worker = workers[id];
          }

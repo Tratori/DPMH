@@ -26,13 +26,13 @@ namespace mean
     // -------------------------------------------------------------------------------------
     namespace env
     {
-        void init(int workerThreads, int exclusiveThreads, IoOptions ioOptions, int threadAffinityOffset = 0);
+        void init(int workerThreads, int exclusiveThreads, IoOptions ioOptions, int threadAffinityOffset = 0, int num_cpus = 0);
         // ExecEnv& instance();
         void start(TaskFunction fun);
         void shutdown();
         void join();
         int workerCount();
-        void adjustWorkerCount(int workerThreads);
+        void adjustWorkerCount(int workerThreads, int num_cpus = 0);
         std::string printCountersHeader();
         std::string printCounters(int te_id);
         template <typename impl>

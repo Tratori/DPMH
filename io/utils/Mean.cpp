@@ -21,9 +21,9 @@ namespace mean
    namespace env
    {
       ExecEnv _instance;
-      void init(int workerThreads, int exclusiveThreads, mean::IoOptions ioOptions, int threadAffinityOffset)
+      void init(int workerThreads, int exclusiveThreads, mean::IoOptions ioOptions, int threadAffinityOffset, int num_cpus)
       {
-         _instance.init(workerThreads, exclusiveThreads, ioOptions, threadAffinityOffset);
+         _instance.init(workerThreads, exclusiveThreads, ioOptions, threadAffinityOffset, num_cpus);
       }
       // -------------------------------------------------------------------------------------
       void start(TaskFunction fun)
@@ -42,9 +42,9 @@ namespace mean
       {
          return _instance.workerCount();
       }
-      void adjustWorkerCount(int workerThreads)
+      void adjustWorkerCount(int workerThreads, int num_cpus)
       {
-         _instance.adjustWorkerCount(workerThreads);
+         _instance.adjustWorkerCount(workerThreads, num_cpus);
       }
       std::string printCountersHeader()
       {
