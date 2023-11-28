@@ -41,6 +41,7 @@ void writePointerChase(int numPages, int pageSize)
                     memcpy(buffer, &pointers.at(i), sizeof(int));
                     channel.pushBlocking(mean::IoRequestType::Write, buffer, pageSize * i, pageSize);
                 }
+                mean::IoInterface::freeIoMemory(buffer, pageSize);
             });
 
         mean::env::shutdown();

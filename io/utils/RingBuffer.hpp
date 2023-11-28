@@ -4,7 +4,7 @@
 #include <vector>
 #include "Units.hpp"
 
-#if true  // NDEBUG
+#ifdef NDEBUG
 #define RB_DEBUG_COUNTER(x)
 #else
 #define RB_DEBUG_COUNTER(x) x
